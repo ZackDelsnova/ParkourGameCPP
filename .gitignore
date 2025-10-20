@@ -1,0 +1,41 @@
+# Build folders
+x64/
+Debug/
+Release/
+ipch/
+
+# Visual Studio files
+.vs/
+*.vcxproj.user
+*.suo
+*.sdf
+*.opensdf
+*.obj
+*.pdb
+*.log
+*.tlog
+*.idb
+
+# Backups and caches
+*.aps
+*.bak
+*.ncb
+*.cache
+*.ilk
+
+# Output binaries
+*.exe
+*.dll
+*.lib
+
+# User-specific files
+*.user
+*.sln.docstates
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Ignore GLAD build files (optional)
+glad/glad.o

@@ -1,19 +1,19 @@
 #pragma once
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
-#include <string>
+#include "Shader.h"
+#include "Object.h"
+#include <vector>
 
 class Renderer {
 public:
-	void Init(int width, int height);
-	void Draw(const Camera& camera);
-	void Cleanup();
+	bool Init(int width, int height);
+	void RenderScene(const Camera& camera);
+	void AddObject(const Object& obj);
+	void Shutdown();
 private:
-	unsigned int VAO, VBO; // Vertex Array Object and Vertex Buffer Object
-	unsigned int shaderProgram;
+	Shader shader;
+	std::vector<Object> objects;
 	glm::mat4 projection;
-
-	unsigned int LoadShader(const std::string& vertexPath, const std::string& fragmentPath);
 };

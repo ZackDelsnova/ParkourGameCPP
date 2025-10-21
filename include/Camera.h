@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL3/SDL.h>
@@ -21,10 +20,8 @@ public:
 	Camera(glm::vec3 startPos);
 
 	glm::mat4 GetViewMatrix() const;
-
-	void ProcessKeyboard(const bool* keys, float deltaTime);
-
-	void ProcessMouse(float xoffset, float yoffset);
+	void HandleKeyboardMovement(const bool* keys, float deltaTime);
+	void HandleMouseLook(float xoffset, float yoffset);
 
 private:
 	void updateCameraVectors();

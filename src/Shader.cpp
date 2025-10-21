@@ -44,6 +44,17 @@ bool Shader::LoadFromFiles(const std::vector<std::string>& files) {
 		return false;
 	}
 
+	glGetProgramiv(program, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		char infoLog[512];
+		glGetProgramInfoLog(program, 512, nullptr, infoLog);
+		std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		return false;
+	}
+
+	int loc = glGetUniformLocation(program, "objectColor");
+	std::cout << "objectColor uniform location: " << loc << std::endl;
+
 	if (vertexShader) glDeleteShader(vertexShader);
 	if (fragmentShader) glDeleteShader(fragmentShader);
 	if (geometryShader) glDeleteShader(geometryShader);
@@ -56,6 +67,10 @@ void Shader::Use() const {
 
 void Shader::SetMat4(const std::string& name, const glm::mat4& value) const {
 	glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, &value[0][0]);
+}
+
+void Shader::SetVec4(const std::string& name, const glm::vec4& value) const {
+	glUniform4fv(glGetUniformLocation(program, name.c_str()), 1, &value[0]);
 }
 
 bool Shader::compileShader(GLuint& shader, const std::string& source, GLenum type) {
@@ -71,6 +86,7 @@ bool Shader::compileShader(GLuint& shader, const std::string& source, GLenum typ
 		std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
 		return false;
 	}
+
 	return true;
 }
 

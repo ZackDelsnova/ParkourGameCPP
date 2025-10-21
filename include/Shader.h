@@ -15,6 +15,7 @@ public:
 	void Use() const;
 	void SetMat4(const std::string& name, const glm::mat4& value) const;
 	// other setter
+	void SetVec4(const std::string& name, const glm::vec4& value) const;
 
 private:
 	GLuint program;

@@ -1,13 +1,13 @@
 #include "Engine.h"
 #include <iostream>
 
-Engine::Engine() : camera(glm::vec3(0.0f, 0.0f, 3.0f)) {}
-
-bool Engine::Init(int w, int h) {
+Engine::Engine(int w, int h) : camera(glm::vec3(0.0f, 0.0f, 3.0f)) {
 	windowWidth = w;
 	windowHeight = h;
+}
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+bool Engine::Init() {
+	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		std::cerr << "SDL failed to init: " << SDL_GetError() << std::endl;
 		return false;
 	}
@@ -46,7 +46,7 @@ bool Engine::Init(int w, int h) {
 	glEnable(GL_DEPTH_TEST);
 	
 	renderer.Init(windowWidth, windowHeight);
-	camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f));
 	isRunning = true;
 	return true;
 }

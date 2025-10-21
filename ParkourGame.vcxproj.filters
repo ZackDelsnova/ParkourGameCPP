@@ -48,6 +48,9 @@
     <ClCompile Include="src\DebugOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="x64\Debug\SDL3.dll" />
@@ -1631,6 +1634,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\DebugOverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

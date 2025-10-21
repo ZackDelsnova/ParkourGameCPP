@@ -1,5 +1,9 @@
 #version 460 core
+
 out vec4 FragColor;
+
+uniform vec4 objectColor;
+
 void main() {
-	FragColor = vec4(0.6, 0.7, 0.9, 1.0); // blue cube
+	FragColor = objectColor;
 }

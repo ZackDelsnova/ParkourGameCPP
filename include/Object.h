@@ -1,14 +1,18 @@
 #pragma once
-#include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "Shader.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <memory>
+#include "Mesh.h"
 
 class Object {
 public:
-	Object();
-	void Draw(const Shader& shader) const;
-	void Destroy();
+	Object(std::shared_ptr<Mesh> mesh, glm::vec3 pos, glm::vec3 color);
 
-private:
-	GLuint VAO, VBO;
+	glm::mat4 GetModelMatrix() const;
+
+	std::shared_ptr<Mesh> mesh;
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale = glm::vec3(1.0f);
+	glm::vec3 color;
 };

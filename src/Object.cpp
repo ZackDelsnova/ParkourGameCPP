@@ -1,37 +1,15 @@
 #include "Object.h"
 
-static const float cubeVertices[] = {
-    -0.5f,-0.5f,-0.5f, 0.5f,-0.5f,-0.5f, 0.5f,0.5f,-0.5f,
-    0.5f,0.5f,-0.5f,-0.5f,0.5f,-0.5f,-0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,0.5f, 0.5f,-0.5f,0.5f, 0.5f,0.5f,0.5f,
-    0.5f,0.5f,0.5f,-0.5f,0.5f,0.5f,-0.5f,-0.5f,0.5f,
-    -0.5f,0.5f,0.5f,-0.5f,0.5f,-0.5f,-0.5f,-0.5f,-0.5f,
-    -0.5f,-0.5f,-0.5f,-0.5f,-0.5f,0.5f,-0.5f,0.5f,0.5f,
-    0.5f,0.5f,0.5f,0.5f,0.5f,-0.5f,0.5f,-0.5f,-0.5f,
-    0.5f,-0.5f,-0.5f,0.5f,-0.5f,0.5f,0.5f,0.5f,0.5f,
-    -0.5f,-0.5f,-0.5f,0.5f,-0.5f,-0.5f,0.5f,-0.5f,0.5f,
-    0.5f,-0.5f,0.5f,-0.5f,-0.5f,0.5f,-0.5f,-0.5f,-0.5f,
-    -0.5f,0.5f,-0.5f,0.5f,0.5f,-0.5f,0.5f,0.5f,0.5f,
-    0.5f,0.5f,0.5f,-0.5f,0.5f,0.5f,-0.5f,0.5f,-0.5f
-};
+Object::Object(std::shared_ptr<Mesh> mesh, glm::vec3 pos, glm::vec3 color) 
+    : mesh(mesh), position(pos), rotation(0.0f), color(color) {}
 
-Object::Object() {
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+glm::mat4 Object::GetModelMatrix() const {
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, position);
+	model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+	model = glm::scale(model, scale);
+	return model;
 }
 
-void Object::Draw(const Shader& shader) const {
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-}
-
-void Object::Destroy() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-}

@@ -6,9 +6,13 @@
 
 class Engine {
 public:
-	Engine();
+	Engine(int w, int h);
 
-	bool Init(int w, int h);
+	Renderer renderer;
+	Camera camera;
+	DebugOverlay debug;
+
+	bool Init();
 	void Run();
 	void Shutdown();
 
@@ -19,10 +23,6 @@ private:
 	SDL_GLContext glContext = nullptr;
 	bool isRunning = false;
 	bool mouseLocked = false;
-
-	Renderer renderer;
-	Camera camera;
-	DebugOverlay debug;
 
 	void ProcessInput(float deltaTime);
 };

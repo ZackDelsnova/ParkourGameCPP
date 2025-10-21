@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "Renderer.h"
-#include "Camera.h"
+#include "Player.h"
 #include "DebugOverlay.h"
 
 class Engine {
@@ -9,7 +9,7 @@ public:
 	Engine(int w, int h);
 
 	Renderer renderer;
-	Camera camera;
+	Player player;
 	DebugOverlay debug;
 
 	bool Init();

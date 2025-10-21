@@ -20,7 +20,6 @@ public:
 	Camera(glm::vec3 startPos);
 
 	glm::mat4 GetViewMatrix() const;
-	void HandleKeyboardMovement(const bool* keys, float deltaTime);
 	void HandleMouseLook(float xoffset, float yoffset);
 
 private:

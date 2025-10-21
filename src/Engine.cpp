@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include <iostream>
 
-Engine::Engine(int w, int h) : camera(glm::vec3(0.0f, 0.0f, 3.0f)) {
+Engine::Engine(int w, int h) : player(glm::vec3(0.0f, 1.5f, 0.0f)){
 	windowWidth = w;
 	windowHeight = h;
 }
@@ -46,7 +46,6 @@ bool Engine::Init() {
 	glEnable(GL_DEPTH_TEST);
 	
 	renderer.Init(windowWidth, windowHeight);
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f));
 	isRunning = true;
 	return true;
 }
@@ -59,8 +58,8 @@ void Engine::Run() {
 		lastTicks = currentTicks;
 
 		ProcessInput(deltaTime);
-		renderer.RenderScene(camera);
-		debug.Update(deltaTime, camera);
+		renderer.RenderScene(player.camera);
+		debug.Update(deltaTime, player);
 
 		SDL_GL_SwapWindow(window);
 	}
@@ -90,15 +89,12 @@ void Engine::ProcessInput(float deltaTime) {
 		}
 	}
 
-	if (keys[SDL_SCANCODE_W] || keys[SDL_SCANCODE_A] ||
-		keys[SDL_SCANCODE_S] || keys[SDL_SCANCODE_D]) {
-		camera.HandleKeyboardMovement(keys, deltaTime);
-	}
+	player.Update(deltaTime, keys, renderer.objects);
 
 	if (mouseLocked) {
 		float mx, my;
 		SDL_GetRelativeMouseState(&mx, &my);
-		camera.HandleMouseLook(mx, -my);
+		player.camera.HandleMouseLook(mx, -my);
 	}
 }
 

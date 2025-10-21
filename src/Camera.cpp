@@ -16,15 +16,6 @@ glm::mat4 Camera::GetViewMatrix() const {
 	return glm::lookAt(Position, Position + Front, Up);
 }
 
-// keyboard input processing
-void Camera::HandleKeyboardMovement(const bool* keys, float deltaTime) {
-	float velocity = Speed * deltaTime;
-	if (keys[SDL_SCANCODE_W]) Position += Front * velocity;
-	if (keys[SDL_SCANCODE_S]) Position -= Front * velocity;
-	if (keys[SDL_SCANCODE_A]) Position -= Right * velocity;
-	if (keys[SDL_SCANCODE_D]) Position += Right * velocity;
-}
-
 // mouse movement processing
 void Camera::HandleMouseLook(float xoffset, float yoffset) {
 	xoffset *= Sensitivity;

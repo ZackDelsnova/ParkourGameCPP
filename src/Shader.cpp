@@ -52,9 +52,6 @@ bool Shader::LoadFromFiles(const std::vector<std::string>& files) {
 		return false;
 	}
 
-	int loc = glGetUniformLocation(program, "objectColor");
-	std::cout << "objectColor uniform location: " << loc << std::endl;
-
 	if (vertexShader) glDeleteShader(vertexShader);
 	if (fragmentShader) glDeleteShader(fragmentShader);
 	if (geometryShader) glDeleteShader(geometryShader);

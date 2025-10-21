@@ -10,6 +10,8 @@
 
 class Renderer {
 public:
+	std::vector<std::shared_ptr<Object>> objects;
+
 	bool Init(int width, int height);
 	void RenderScene(const Camera& camera);
 	void AddObject(std::shared_ptr<Object> obj);
@@ -17,6 +19,5 @@ public:
 
 private:
 	Shader shader;
-	std::vector<std::shared_ptr<Object>> objects;
 	glm::mat4 projection;
 };

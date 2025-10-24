@@ -17,7 +17,9 @@ Player::Player(const glm::vec3& startPos) :
 }
 
 void Player::Update(float deltaTime, const bool* keys, const std::vector<std::shared_ptr<Object>>& worldObjects) {
-	
+	float coyoteTime = 0.1f;
+	static bool spacePressedLastFrame = false;
+
 	glm::vec3 move(0.0f);
 	if (keys[SDL_SCANCODE_W]) move += camera.Front;
 	if (keys[SDL_SCANCODE_S]) move -= camera.Front;
@@ -30,10 +32,26 @@ void Player::Update(float deltaTime, const bool* keys, const std::vector<std::sh
 		Move(move, deltaTime);
 	}
 
-	// jump
-	if (onGround && keys[SDL_SCANCODE_SPACE]) {
-		Jump();
+	if (onGround) {
+		jumpsLeft = maxJumps;
+		timeSinceGrounded = 0.0f;
+	} else {
+		timeSinceGrounded += deltaTime;
 	}
+
+	// jump
+	bool spacePressed = keys[SDL_SCANCODE_SPACE];
+	if (spacePressed && !spacePressedLastFrame) {
+		if (jumpsLeft > 0) {
+			Jump();
+			jumpsLeft--;
+		}
+		else if (timeSinceGrounded < coyoteTime) {
+			Jump();
+		}
+	}
+
+	spacePressedLastFrame = spacePressed;
 
 	// gravity
 	if (!onGround) {

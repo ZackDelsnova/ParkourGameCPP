@@ -19,6 +19,9 @@ public:
 	float gravity;
 	float height;
 	float radius;
+	int maxJumps = 2;
+	int jumpsLeft = 2;
+	float timeSinceGrounded = 0.0f;
 
 	Player(const glm::vec3& startPos);
 

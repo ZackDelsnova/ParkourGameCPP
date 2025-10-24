@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Mesh.h"
+#include "MeshFactory.h"
 #include "Object.h"
 #include <vector>
 #include <memory>
@@ -10,26 +11,13 @@ int main() {
 		return -1;
 	}
 
-    // cube vertices 
-    std::vector<float> cubeVerts = {
-        -0.5f,-0.5f,-0.5f,  0.5f,-0.5f,-0.5f,  0.5f, 0.5f,-0.5f,
-         0.5f, 0.5f,-0.5f, -0.5f, 0.5f,-0.5f, -0.5f,-0.5f,-0.5f,
-        -0.5f,-0.5f, 0.5f,  0.5f,-0.5f, 0.5f,  0.5f, 0.5f, 0.5f,
-         0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f,-0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f, -0.5f, 0.5f,-0.5f, -0.5f,-0.5f,-0.5f,
-        -0.5f,-0.5f,-0.5f, -0.5f,-0.5f, 0.5f, -0.5f, 0.5f, 0.5f,
-         0.5f, 0.5f, 0.5f,  0.5f, 0.5f,-0.5f,  0.5f,-0.5f,-0.5f,
-         0.5f,-0.5f,-0.5f,  0.5f,-0.5f, 0.5f,  0.5f, 0.5f, 0.5f,
-        -0.5f,-0.5f,-0.5f,  0.5f,-0.5f,-0.5f,  0.5f,-0.5f, 0.5f,
-         0.5f,-0.5f, 0.5f, -0.5f,-0.5f, 0.5f, -0.5f,-0.5f,-0.5f,
-        -0.5f, 0.5f,-0.5f,  0.5f, 0.5f,-0.5f,  0.5f, 0.5f, 0.5f,
-         0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f,-0.5f
-    };
-
     std::vector<std::shared_ptr<Object>> worldObjects;
 
-	auto cubeMesh = std::make_shared<Mesh>(cubeVerts);
-    auto platformMesh = std::make_shared<Mesh>(cubeVerts);
+    auto cubeMesh = MeshFactory::CreateCube();
+    auto sphereMesh = MeshFactory::CreateSphere();
+    auto cylinderMesh = MeshFactory::CreateCylinder();
+    auto platformMesh = MeshFactory::CreateCube();
+    auto quadMesh = MeshFactory::CreateQuad();
 
 	auto floor1 = std::make_shared<Object>(platformMesh, glm::vec3(0, -1, 0), glm::vec3(0.5f, 0.5f, 0.5f));
 	floor1->scale = glm::vec3(100, 1, 100);
@@ -47,19 +35,25 @@ int main() {
     engine.renderer.AddObject(floor3);
     worldObjects.push_back(floor3);
 
-	auto cube1 = std::make_shared<Object>(cubeMesh, glm::vec3(0, 0, -3), glm::vec3(1, 0, 0));
-    cube1->scale = glm::vec3(2, 1, 4);
-    cube1->rotation = glm::vec3(1, 90, 1);
-    auto cube2 = std::make_shared<Object>(cubeMesh, glm::vec3(10, 6, -3), glm::vec3(0, 1, 0));
-    auto cube3 = std::make_shared<Object>(cubeMesh, glm::vec3(-2, 3, 10), glm::vec3(0, 0, 1));
+	auto cube = std::make_shared<Object>(cubeMesh, glm::vec3(0, 0, -3), glm::vec3(1, 0, 0));
+    cube->scale = glm::vec3(2, 1, 4);
+    cube->rotation = glm::vec3(1, 90, 1);
+    auto sphere = std::make_shared<Object>(sphereMesh, glm::vec3(10, 6, -3), glm::vec3(0, 1, 0));
+    sphere->scale = glm::vec3(3, 3, 3);
+    auto cylinder = std::make_shared<Object>(cylinderMesh, glm::vec3(-2, 3, 10), glm::vec3(0, 0, 1));
+    cylinder->scale = glm::vec3(2, 4, 2);
+    auto quad = std::make_shared<Object>(quadMesh, glm::vec3(5, 0, -2), glm::vec3(1, 1, 0));
+    quad->scale = glm::vec3(2, 2, 2);
 
-	engine.renderer.AddObject(cube1);
-    engine.renderer.AddObject(cube2);
-    engine.renderer.AddObject(cube3);
+	engine.renderer.AddObject(cube);
+    engine.renderer.AddObject(sphere);
+    engine.renderer.AddObject(cylinder);
+    engine.renderer.AddObject(quad);
 
-	worldObjects.push_back(cube1);
-    worldObjects.push_back(cube2);
-	worldObjects.push_back(cube3);
+	worldObjects.push_back(cube);
+    worldObjects.push_back(sphere);
+	worldObjects.push_back(cylinder);
+    worldObjects.push_back(quad);
 
 	engine.Run();
 	engine.Shutdown();

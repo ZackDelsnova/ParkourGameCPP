@@ -16,16 +16,16 @@ int main() {
     auto cubeMesh = MeshFactory::CreateCube();
     auto sphereMesh = MeshFactory::CreateSphere();
     auto cylinderMesh = MeshFactory::CreateCylinder();
-    auto platformMesh = MeshFactory::CreateCube();
+    auto capsuleMesh = MeshFactory::CreateCapsule();
     auto quadMesh = MeshFactory::CreateQuad();
 
-	auto floor1 = std::make_shared<Object>(platformMesh, glm::vec3(0, -1, 0), glm::vec3(0.5f, 0.5f, 0.5f));
+	auto floor1 = std::make_shared<Object>(cubeMesh, glm::vec3(0, -1, 0), glm::vec3(0.5f, 0.5f, 0.5f));
 	floor1->scale = glm::vec3(100, 1, 100);
 
-    auto floor2 = std::make_shared<Object>(platformMesh, glm::vec3(10, 5, 0), glm::vec3(0.5f, 0.5f, 0.6f));
+    auto floor2 = std::make_shared<Object>(cubeMesh, glm::vec3(10, 5, 0), glm::vec3(0.5f, 0.5f, 0.6f));
     floor2->scale = glm::vec3(10, 1, 10);
 
-    auto floor3 = std::make_shared<Object>(platformMesh, glm::vec3(0, 2, 10), glm::vec3(0.5f, 0.5f, 0.7f));
+    auto floor3 = std::make_shared<Object>(cubeMesh, glm::vec3(0, 2, 10), glm::vec3(0.5f, 0.5f, 0.7f));
     floor3->scale = glm::vec3(10, 1, 10);
 
 	engine.renderer.AddObject(floor1);
@@ -44,11 +44,13 @@ int main() {
     cylinder->scale = glm::vec3(2, 4, 2);
     auto quad = std::make_shared<Object>(quadMesh, glm::vec3(5, 0, -2), glm::vec3(1, 1, 0));
     quad->scale = glm::vec3(2, 2, 2);
+    auto capsule = std::make_shared<Object>(capsuleMesh, ::glm::vec3(7, 1, -5), glm::vec3(0, 1, 1));
 
 	engine.renderer.AddObject(cube);
     engine.renderer.AddObject(sphere);
     engine.renderer.AddObject(cylinder);
     engine.renderer.AddObject(quad);
+    engine.renderer.AddObject(capsule);
 
 	worldObjects.push_back(cube);
     worldObjects.push_back(sphere);

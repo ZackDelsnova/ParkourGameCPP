@@ -14,8 +14,10 @@ public:
 
 	float Yaw;   // yaw angle (in degrees), rotation around y axis
 	float Pitch; // pitch angle (in degrees), rotation around x axis
-	float Speed; // movement speed
 	float Sensitivity; // mouse sensitivity
+	float maxPitch = 89.0f;
+	float minPitch = -60.0f;
+	float softZone = 10.0f;
 
 	Camera(glm::vec3 startPos);
 

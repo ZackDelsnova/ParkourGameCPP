@@ -6,7 +6,6 @@ Camera::Camera(glm::vec3 startPos) {
 	WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	Yaw = -90.0f; // facing towards negative z by default
 	Pitch = 0.0f;
-	Speed = 3.0f;
 	Sensitivity = 0.1f;
 	updateCameraVectors();
 }
@@ -25,8 +24,13 @@ void Camera::HandleMouseLook(float xoffset, float yoffset) {
 	Pitch += yoffset;
 
 	// constrain pitch
-	if (Pitch > 89.0f) Pitch = 89.0f;
-	if (Pitch < -89.0f) Pitch = -89.0f;
+	if (Pitch < minPitch + softZone) {
+		float t = (Pitch - (minPitch + softZone)) / -softZone;
+		float softness = 1.0f - glm::smoothstep(0.0f, 1.0f, t);
+		Pitch = minPitch + softZone * softness;
+	}
+
+	if (Pitch > maxPitch) Pitch = maxPitch;
 
 	updateCameraVectors();
 }

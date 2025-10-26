@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include <iostream>
 
-Engine::Engine(int w, int h) : player(glm::vec3(0.0f, 1.5f, 0.0f)){
+Engine::Engine(int w, int h) : player(glm::vec3(0.0f, 1.5f, 0.0f)) {
 	windowWidth = w;
 	windowHeight = h;
 }
@@ -44,8 +44,9 @@ bool Engine::Init() {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	
 	renderer.Init(windowWidth, windowHeight);
+	player.InitGraphics();
+	renderer.AddObject(player.capsule);
 	isRunning = true;
 	return true;
 }

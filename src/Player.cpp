@@ -14,6 +14,12 @@ Player::Player(const glm::vec3& startPos) :
 	height(1.8f),
 	radius(0.3f)
 {
+	cameraOffset = glm::vec3(0.0f, height * 0.8f, 0.0f);
+}
+
+void Player::InitGraphics() {
+	auto capsuleMesh = MeshFactory::CreateCapsule(32, 32, radius, height);
+	capsule = std::make_shared<Object>(capsuleMesh, position, glm::vec3(0, 1, 1));
 }
 
 void Player::Update(float deltaTime, const bool* keys, const std::vector<std::shared_ptr<Object>>& worldObjects) {
@@ -26,12 +32,17 @@ void Player::Update(float deltaTime, const bool* keys, const std::vector<std::sh
 	if (keys[SDL_SCANCODE_A]) move -= camera.Right;
 	if (keys[SDL_SCANCODE_D]) move += camera.Right;
 
+	// sprint
+	isSprinting = keys[SDL_SCANCODE_LSHIFT];
+	float currentSpeed = speed * (isSprinting ? sprintMultiplier : 1.0f);
+
 	move.y = 0.0f; // prevent flying
 	if (glm::length(move) > 0.0f) {
 		move = glm::normalize(move);
-		Move(move, deltaTime);
+		Move(move, deltaTime * currentSpeed);
 	}
 
+	// update coyote timer & jump
 	if (onGround) {
 		jumpsLeft = maxJumps;
 		timeSinceGrounded = 0.0f;
@@ -42,15 +53,11 @@ void Player::Update(float deltaTime, const bool* keys, const std::vector<std::sh
 	// jump
 	bool spacePressed = keys[SDL_SCANCODE_SPACE];
 	if (spacePressed && !spacePressedLastFrame) {
-		if (jumpsLeft > 0) {
+		if (jumpsLeft > 0 || timeSinceGrounded < coyoteTime) {
 			Jump();
-			jumpsLeft--;
-		}
-		else if (timeSinceGrounded < coyoteTime) {
-			Jump();
+			headBobJumpTimer = 0.1f;
 		}
 	}
-
 	spacePressedLastFrame = spacePressed;
 
 	// gravity
@@ -62,22 +69,53 @@ void Player::Update(float deltaTime, const bool* keys, const std::vector<std::sh
 	position += velocity * deltaTime;
 
 	// check ground collision
+	bool wasGrounded = onGround;
 	onGround = CheckGroundCollision(worldObjects);
 
+	// vert vel to 0 when landing
 	if (onGround && velocity.y < 0.0f) {
 		velocity.y = 0.0f;
+		// land camera bob
+		if (!wasGrounded) headBobLandTimer = 0.1f;
 	}
 
-	camera.Position = position;
+	capsule->position = position;
+
+	// headbob
+	glm::vec3 bobOffset(0.0f);
+	if (glm::length(move) > 0.01f) {
+		float bobSpeed = headBobFrequency * (isSprinting ? sprintMultiplier : 1.0f);
+		headBobTimer += deltaTime * bobSpeed;
+		bobOffset.y = std::sin(headBobTimer) * headBobAmplitude;
+		bobOffset.x = std::sin(headBobTimer * 0.5f) * headBobAmplitude * 0.5f;
+	}
+	else {
+		headBobTimer = 0.0f;
+	}
+
+	if (headBobJumpTimer > 0.0f) {
+		bobOffset.y += std::sin((headBobJumpTimer / 0.1f) * glm::pi<float>()) * headBobAmplitude * 0.5f;
+		headBobJumpTimer -= deltaTime;
+	}
+
+	if (headBobLandTimer > 0.0f) {
+		bobOffset.y -= std::sin((headBobLandTimer / 0.1f) * glm::pi<float>()) * headBobAmplitude * 0.5f;
+		headBobTimer -= deltaTime;
+	}
+
+	camera.Position = position + cameraOffset + bobOffset;
+
+	capsule->rotation.y = camera.Yaw;
 }
 
 void Player::Move(const glm::vec3 dir, float deltaTime) {
-	position += dir * speed * deltaTime;
+	position += dir * deltaTime;
 }
 
 void Player::Jump() {
 	velocity.y = jumpStrength;
 	onGround = false;
+	jumpsLeft--;
 }
 
 void Player::SetPosition(const glm::vec3& pos) {

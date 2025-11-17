@@ -39,3 +39,9 @@ ipch/
 
 # Ignore GLAD build files (optional)
 glad/glad.o
+
+# External dependencies
+include/glad/
+include/glm/
+include/KHR/
+include/SDL3/

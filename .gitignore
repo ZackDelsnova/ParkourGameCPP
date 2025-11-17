@@ -39,6 +39,7 @@ ipch/
 
 # Ignore GLAD build files (optional)
 glad/glad.o
+src/glad.c
 
 # External dependencies
 include/glad/
